@@ -1,0 +1,13 @@
+.homeSection.container {
+  width: 80%;
+  margin: 50px auto;
+  .glider-slide {
+    margin: 0 10px;
+  }
+  img {
+    border-radius: 5px;
+  }
+  h2 {
+    color: var(--white);
+  }
+}

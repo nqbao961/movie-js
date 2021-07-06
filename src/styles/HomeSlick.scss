@@ -1,0 +1,25 @@
+.homeSlick.container {
+  .item {
+    position: relative;
+    outline: none;
+    img {
+      height: 500px;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  .item-wrapper {
+    position: absolute;
+    bottom: 100px;
+    width: 100%;
+    padding: 0 20px;
+    h3 {
+      font-size: 40px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+  }
+  .slick-dots {
+    bottom: 20px;
+  }
+}

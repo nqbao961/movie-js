@@ -1,0 +1,21 @@
+.button.container {
+  margin: 0 6px;
+  padding: 6px 8px;
+  color: var(--white);
+  border-radius: 4px;
+  transition: all 0.5s ease;
+  cursor: pointer;
+  &.primary {
+    background-color: var(--accent);
+    border: 2px solid var(--accent);
+  }
+  &.border {
+    background-color: var(--transparent);
+    border: 2px solid var(--accent);
+  }
+  &:hover {
+    background-color: var(--white);
+    border: 2px solid var(--white);
+    color: var(--accent);
+  }
+}
