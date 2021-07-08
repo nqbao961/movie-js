@@ -1,96 +1,53 @@
 import express from "express";
 import path from "path";
-import fs from "fs";
+import { promises as fs } from "fs";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import App from "../src/App";
-import axios from "axios";
+import { getTrending, getMarvelMovies } from "./utils/api";
+import { updateCache } from "./utils/cache";
+import { createCriticalCss } from "./utils/critical";
 
 const cache = require("memory-cache");
-const critical = require("critical");
-
-const API_KEY = "1112710f884452a17dad4e6798af5e9e";
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-critical.generate({
-  /* The path of the Webpack bundle */
-  base: path.resolve("./build/"),
-  src: "index.html",
-  target: "index.html",
-  inline: true,
-  extract: true,
-  width: 1400,
-  height: 900,
+updateCache(cache);
+setInterval(() => {
+  updateCache(cache);
+}, 15 * 1000 * 60);
 
-  /* Ensure that bundled JS file is called */
-  penthouse: {
-    blockJSRequests: false,
-  },
-});
-
-async function getTrending() {
-  const res = await axios.get("https://api.themoviedb.org/3/trending/all/day", {
-    params: {
-      api_key: API_KEY,
-    },
-  });
-  return res;
-}
-
-async function getMarvelMovies() {
-  const res = await axios.get(
-    "https://api.themoviedb.org/3/keyword/180547/movies",
-    {
-      params: {
-        api_key: API_KEY,
-      },
-    }
-  );
-  return res;
-}
-
-function updateCache() {
-  getTrending()
-    .then((response) => {
-      let newData = { ...response.data };
-      // Shuffle movies
-      newData.results.sort(function () {
-        return 0.5 - Math.random();
-      });
-      cache.put("trendingList", newData);
+(async () => {
+  await fs
+    .readFile(path.resolve("./build/index.html"), "utf8")
+    .then(async (html) => {
+      await createCriticalCss(html)
+        .then((newHtml) => {
+          fs.writeFile(path.resolve("./build/index.html"), newHtml, (err) => {
+            if (err) throw err;
+          });
+        })
+        .catch((err) => console.error("Something went wrong:", err));
     })
-    .catch((error) => {
-      throw new Error(error);
-    });
+    .catch((err) => console.error("Something went wrong:", err));
+})();
 
-  getMarvelMovies()
-    .then((response) => {
-      cache.put("marvelList", response.data);
-    })
-    .catch((error) => {
-      throw new Error(error);
-    });
-}
-
-updateCache();
-setInterval(updateCache, 15 * 1000 * 60);
-
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   const root = ReactDOMServer.renderToString(<App />);
 
   const indexFile = path.resolve("./build/index.html");
-  fs.readFile(indexFile, "utf8", (err, data) => {
-    if (err) {
+  await fs
+    .readFile(indexFile, "utf8")
+    .then((data) => {
+      return res.send(
+        data.replace('<div id="root"></div>', `<div id="root">${root}</div>`)
+      );
+    })
+    .catch((err) => {
       console.error("Something went wrong:", err);
       return res.status(500).send("Oops, better luck next time!");
-    }
-
-    return res.send(
-      data.replace('<div id="root"></div>', `<div id="root">${root}</div>`)
-    );
-  });
+    });
 });
 
 app.get("/api/trending", (req, res) => {
