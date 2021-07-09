@@ -30,7 +30,7 @@
     "dev:start": "nodemon build/index.js",
     "watch": "cra-build-watch",
     "dev": "npm-run-all build dev:*",
-    "heroku-postbuild": "npm-run-all build dev:*"
+    "heroku-postbuild": "npm-run-all build dev:build-server && node build/index.js"
   },
   "eslintConfig": {
     "extends": [
