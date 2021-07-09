@@ -19,6 +19,7 @@ async function createCriticalCss(html) {
   for (let i = 0; i < styleLinks.length; i++) {
     let stylePath = styleLinks[i].getAttribute("href");
     let cssFile = path.resolve("./build" + stylePath);
+    styleLinks[i].setAttribute("media", "print");
     styleLinks[i].setAttribute("onload", "this.media='all'");
 
     await fs

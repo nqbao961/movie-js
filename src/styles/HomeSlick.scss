@@ -1,4 +1,10 @@
 .homeSlick.container {
+  &.place-holder {
+    background-image: url("https://www.signfix.com.au/wp-content/uploads/2017/09/placeholder-600x400.png");
+    height: 500px;
+    background-position: center;
+    background-size: cover;
+  }
   .item {
     position: relative;
     outline: none;

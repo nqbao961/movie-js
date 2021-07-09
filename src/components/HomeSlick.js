@@ -47,7 +47,9 @@ export default function HomeSlick() {
     }
   }, [list]);
 
-  return (
+  return slickList.length === 0 ? (
+    <div className="homeSlick container place-holder"></div>
+  ) : (
     <Slider {...settings} className="homeSlick container">
       {slickList}
     </Slider>
