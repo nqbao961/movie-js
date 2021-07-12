@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
-import Button from "./Button";
+import SlickItem from "./SlickItem";
 import "../styles/HomeSlick.scss";
 import axios from "axios";
-import { IMAGE_BASE } from "../constants";
+import { createObserver } from "../utils/lazy-load";
 
 export default function HomeSlick() {
   const [list, setList] = useState(null);
   const [slickList, setSlickList] = useState([]);
+  const [observer, setObserver] = useState(null);
+
+  useEffect(() => {
+    const itemObserver = createObserver();
+    setObserver(itemObserver);
+
+    return () => {
+      itemObserver.disconnect();
+    };
+  }, []);
 
   var settings = {
     dots: true,
@@ -29,19 +39,13 @@ export default function HomeSlick() {
     if (list) {
       setSlickList(
         [0, 1, 2].map((index) => (
-          <div key={list[index].id} className="item">
-            <div className="item-wrapper">
-              <h3>{list[index].title || list[index].name}</h3>
-              <div className="button-wrapper">
-                <Button type="primary">Watch Now</Button>
-                <Button type="border">Watch Trailer</Button>
-              </div>
-            </div>
-            <img
-              src={IMAGE_BASE.ORIGINAL + list[index].backdrop_path}
-              alt={list[index].title || list[index].name}
-            />
-          </div>
+          <SlickItem
+            key={list[index].id}
+            observer={observer}
+            title={list[index].title}
+            name={list[index].name}
+            src={list[index].backdrop_path}
+          />
         ))
       );
     }

@@ -1,6 +1,10 @@
 .homeSection.container {
   width: 80%;
   margin: 50px auto;
+  .place-holder {
+    background-color: gray;
+    height: 300px;
+  }
   .glider-slide {
     margin: 0 10px;
   }
