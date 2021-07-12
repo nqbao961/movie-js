@@ -22,4 +22,46 @@ async function getMarvelMovies() {
   return res;
 }
 
-export { getTrending, getMarvelMovies };
+async function getAnimeMovies() {
+  const res = await axios.get(
+    "https://api.themoviedb.org/3/keyword/210024/movies",
+    {
+      params: {
+        api_key: API_KEY,
+      },
+    }
+  );
+  return res;
+}
+
+async function getDisneyMovies() {
+  const res = await axios.get(
+    "https://api.themoviedb.org/3/keyword/277578/movies",
+    {
+      params: {
+        api_key: API_KEY,
+      },
+    }
+  );
+  return res;
+}
+
+async function getHorrorMovies() {
+  const res = await axios.get(
+    "https://api.themoviedb.org/3/keyword/8087/movies",
+    {
+      params: {
+        api_key: API_KEY,
+      },
+    }
+  );
+  return res;
+}
+
+export default {
+  getTrending,
+  getMarvelMovies,
+  getAnimeMovies,
+  getDisneyMovies,
+  getHorrorMovies,
+};

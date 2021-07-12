@@ -18,20 +18,20 @@ export default function TopNavigation() {
 
   return (
     <div
-      className='topNavigation container'
+      className="topNavigation container"
       style={position !== 0 ? { backgroundColor: "#0a11166e" } : undefined}
     >
-      <div className='wrapper'>
-        <div className='favicon'>
-          <img src="/favicon.ico" alt="" />
+      <div className="wrapper">
+        <div className="favicon">
+          <img src="/logo.png" alt="logo" />
         </div>
-        <div className='navList'>
-          <ul className='leftNav'>
-            <li className='navItem'>
+        <div className="navList">
+          <ul className="leftNav">
+            <li className="navItem">
               <a href="movies">Movies</a>
             </li>
           </ul>
-          <div className='rightNav'>
+          <div className="rightNav">
             <input type="text" />
             <Button type="primary">Sign in</Button>
             <Button type="border">Sign up</Button>

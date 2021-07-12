@@ -1,7 +1,8 @@
-import { getTrending, getMarvelMovies } from "../utils/api";
+import api from "../utils/api";
 
 function updateCache(cache) {
-  getTrending()
+  api
+    .getTrending()
     .then((response) => {
       let newData = { ...response.data };
       // Shuffle movies
@@ -14,9 +15,37 @@ function updateCache(cache) {
       throw new Error(error);
     });
 
-  getMarvelMovies()
+  api
+    .getMarvelMovies()
     .then((response) => {
       cache.put("marvelList", response.data);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+
+  api
+    .getAnimeMovies()
+    .then((response) => {
+      cache.put("animeList", response.data);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+
+  api
+    .getDisneyMovies()
+    .then((response) => {
+      cache.put("disneyList", response.data);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+
+  api
+    .getHorrorMovies()
+    .then((response) => {
+      cache.put("horrorList", response.data);
     })
     .catch((error) => {
       throw new Error(error);

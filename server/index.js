@@ -4,7 +4,7 @@ import { promises as fs } from "fs";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import App from "../src/App";
-import { getTrending, getMarvelMovies } from "./utils/api";
+import api from "./utils/api";
 import { updateCache } from "./utils/cache";
 import { createCriticalCss } from "./utils/critical";
 
@@ -54,7 +54,8 @@ app.get("/api/trending", (req, res) => {
   if (cache.get("trendingList")) {
     res.send(cache.get("trendingList"));
   } else {
-    getTrending()
+    api
+      .getTrending()
       .then((response) => {
         res.send(response.data);
       })
@@ -68,7 +69,53 @@ app.get("/api/marvel", (req, res) => {
   if (cache.get("marvelList")) {
     res.send(cache.get("marvelList"));
   } else {
-    getMarvelMovies()
+    api
+      .getMarvelMovies()
+      .then((response) => {
+        res.send(response.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+});
+
+app.get("/api/anime", (req, res) => {
+  if (cache.get("animeList")) {
+    res.send(cache.get("animeList"));
+  } else {
+    api
+      .getAnimeMovies()
+      .then((response) => {
+        res.send(response.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+});
+
+app.get("/api/disney", (req, res) => {
+  if (cache.get("disneyList")) {
+    res.send(cache.get("disneyList"));
+  } else {
+    api
+      .getDisneyMovies()
+      .then((response) => {
+        res.send(response.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+});
+
+app.get("/api/horror", (req, res) => {
+  if (cache.get("horrorList")) {
+    res.send(cache.get("horrorList"));
+  } else {
+    api
+      .getHorrorMovies()
       .then((response) => {
         res.send(response.data);
       })
