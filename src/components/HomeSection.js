@@ -6,6 +6,11 @@ import { createObserver } from "../utils/lazy-load";
 
 const SectionItem = ({ observer, item }) => {
   const itemRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+
+  function onLoad() {
+    setLoaded(true);
+  }
 
   useEffect(() => {
     const itemElement = itemRef.current;
@@ -23,7 +28,10 @@ const SectionItem = ({ observer, item }) => {
   return (
     <div ref={itemRef} className={`glider-slide section-item`}>
       <div className="item-wrapper">
+        {!loaded && <div className="shimmer"></div>}
         <img
+          style={{ display: loaded ? "block" : "none" }}
+          onLoad={onLoad}
           data-src={IMAGE_BASE.SMALL + item.poster_path}
           alt={item.title || item.name}
         />
