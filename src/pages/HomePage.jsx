@@ -10,7 +10,7 @@ function getData(url, setCallback) {
     .catch((err) => console.log(err));
 }
 
-export default function Home() {
+export default function HomePage() {
   const [trendingList, setTrendingList] = useState(null);
   const [marvelList, setMarvelList] = useState(null);
   const [animeList, setAnimeList] = useState(null);

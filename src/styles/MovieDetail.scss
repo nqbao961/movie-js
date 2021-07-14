@@ -1,0 +1,27 @@
+.movieDetail {
+  .container {
+    .backdrop-wrapper {
+      position: relative;
+      background-color: gray;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 500px;
+    }
+    .info-wrapper {
+      position: absolute;
+      color: var(--white);
+      bottom: 100px;
+      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .info {
+      display: flex;
+      gap: 25px;
+    }
+    .content-wrapper {
+      margin: 20px auto;
+    }
+  }
+}

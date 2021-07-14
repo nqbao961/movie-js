@@ -4,7 +4,7 @@ import "../styles/Footer.scss";
 export default function Footer() {
   return (
     <footer>
-      <div className="container">
+      <div className="container wrapper">
         <div className="col">
           <img src="/logo.png" alt="logo" />
           <p className="description">

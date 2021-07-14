@@ -3,6 +3,7 @@ import Glider from "react-glider";
 import "../styles/HomeSection.scss";
 import { IMAGE_BASE } from "../constants";
 import { createObserver } from "../utils/lazy-load";
+import { Link } from "react-router-dom";
 
 const SectionItem = ({ observer, item }) => {
   const itemRef = useRef(null);
@@ -26,7 +27,11 @@ const SectionItem = ({ observer, item }) => {
     };
   }, [observer]);
   return (
-    <div ref={itemRef} className={`glider-slide section-item`}>
+    <Link
+      ref={itemRef}
+      to={`/movie/${encodeURI(item.title || item.name)}/${item.id}`}
+      className={`glider-slide section-item`}
+    >
       <div className="item-wrapper">
         {!loaded && <div className="shimmer"></div>}
         <img
@@ -37,7 +42,7 @@ const SectionItem = ({ observer, item }) => {
         />
         <p>{item.title || item.name}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 
