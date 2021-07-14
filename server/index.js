@@ -4,9 +4,12 @@ import { promises as fs } from "fs";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import App from "../src/App";
+import { StaticRouter } from "react-router";
 import api from "./utils/api";
 import { updateCache } from "./utils/cache";
 import { createCriticalCss } from "./utils/critical";
+import { matchPath } from "react-router-dom";
+import routes from "../src/routes";
 
 const cache = require("memory-cache");
 
@@ -33,21 +36,32 @@ setInterval(() => {
     .catch((err) => console.error("Something went wrong:", err));
 })();
 
-app.get("/", async (req, res) => {
-  const root = ReactDOMServer.renderToString(<App />);
+app.get("/*", async (req, res, next) => {
+  const currentRoute = routes.find((route) => matchPath(req.url, route));
+  const staticContext = {};
 
-  const indexFile = path.resolve("./build/index.html");
-  await fs
-    .readFile(indexFile, "utf8")
-    .then((data) => {
-      return res.send(
-        data.replace('<div id="root"></div>', `<div id="root">${root}</div>`)
-      );
-    })
-    .catch((err) => {
-      console.error("Something went wrong:", err);
-      return res.status(500).send("Oops, better luck next time!");
-    });
+  if (currentRoute) {
+    const root = ReactDOMServer.renderToString(
+      <StaticRouter location={req.url} context={staticContext}>
+        <App />
+      </StaticRouter>
+    );
+
+    const indexFile = path.resolve("./build/index.html");
+    await fs
+      .readFile(indexFile, "utf8")
+      .then((data) => {
+        return res.send(
+          data.replace('<div id="root"></div>', `<div id="root">${root}</div>`)
+        );
+      })
+      .catch((err) => {
+        console.error("Something went wrong:", err);
+        return res.status(500).send("Oops, better luck next time!");
+      });
+  } else {
+    next();
+  }
 });
 
 app.get("/api/trending", (req, res) => {
@@ -123,6 +137,17 @@ app.get("/api/horror", (req, res) => {
         throw new Error(error);
       });
   }
+});
+
+app.get("/api/movie/:id", (req, res) => {
+  api
+    .getMovieDetail(req.params.id)
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
 });
 
 app.use(express.static("build"));

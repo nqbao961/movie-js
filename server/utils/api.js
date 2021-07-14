@@ -58,10 +58,20 @@ async function getHorrorMovies() {
   return res;
 }
 
+async function getMovieDetail(id) {
+  const res = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
+    params: {
+      api_key: API_KEY,
+    },
+  });
+  return res;
+}
+
 export default {
   getTrending,
   getMarvelMovies,
   getAnimeMovies,
   getDisneyMovies,
   getHorrorMovies,
+  getMovieDetail,
 };
